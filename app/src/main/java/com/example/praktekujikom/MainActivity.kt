@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.RadioGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.praktekujikom.databinding.ActivityMainBinding
@@ -19,12 +20,27 @@ import java.util.Calendar
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var getFile: File? = null
+    private var getFile: Uri? = null
+    private var tanggal: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        var nama = binding.nama.text.toString()
+        var nip = binding.NIP.text.toString()
+
+        val laki = binding.radioButton
+        val perempuan = binding.radioButton2
+        var selectedID = binding.radio.checkedRadioButtonId
+        var jenisKelamin = if (selectedID == laki.id) {
+            "Laki - laki"
+        } else {
+            "Perempuan"
+        }
+
+        var tempatLahir = binding.tempatlahir.text.toString()
 
         binding.btnPickDate.setOnClickListener {
             showDatePickerDialog()
@@ -32,6 +48,18 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnPickPhoto.setOnClickListener {
             startGallery()
+        }
+
+        binding.btnAdd.setOnClickListener {
+            startActivity(
+                Intent(this, EditDataActivity::class.java)
+                    .putExtra(EditDataActivity.EXTRA_NAMA, nama)
+                    .putExtra(EditDataActivity.EXTRA_NIP, nip)
+                    .putExtra(EditDataActivity.EXTRA_GENDER, jenisKelamin)
+                    .putExtra(EditDataActivity.EXTRA_TANGGAL, tanggal)
+                    .putExtra(EditDataActivity.EXTRA_TEMPAT_LAHIR, tempatLahir)
+                    .putExtra(EditDataActivity.EXTRA_FOTO, getFile.toString())
+            )
         }
     }
 
@@ -49,8 +77,10 @@ class MainActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             val selectedImg = result.data?.data as Uri
             selectedImg.let { uri ->
-                val myFile = uriToFile(uri, this)
-                getFile = myFile
+//                val myFile = uriToFile(uri, this)
+                getFile = uri
+                Log.d("FOTO MAIN", "$getFile")
+
                 binding.ivPreviewImage.setImageURI(uri)
             }
         }
@@ -70,6 +100,7 @@ class MainActivity : AppCompatActivity() {
                 // Tampilkan atau gunakan tanggal yang dipilih
                 // Misalnya, set pada TextView atau lakukan sesuatu yang lain
                 binding.dateview.text = selectedDate
+                tanggal = selectedDate
             },
             year,
             month,
@@ -77,5 +108,6 @@ class MainActivity : AppCompatActivity() {
         )
 
         datePickerDialog.show()
+
     }
 }
