@@ -28,20 +28,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var nama = binding.nama.text.toString()
-        var nip = binding.NIP.text.toString()
-
-        val laki = binding.radioButton
-        val perempuan = binding.radioButton2
-        var selectedID = binding.radio.checkedRadioButtonId
-        var jenisKelamin = if (selectedID == laki.id) {
-            "Laki - laki"
-        } else {
-            "Perempuan"
-        }
-
-        var tempatLahir = binding.tempatlahir.text.toString()
-
         binding.btnPickDate.setOnClickListener {
             showDatePickerDialog()
         }
@@ -51,6 +37,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnAdd.setOnClickListener {
+            var nama = binding.editTextTextPersonName2.text.toString()
+            var nip = binding.editTextTextPersonName3.text.toString()
+
+            val laki = binding.radioButton
+            val perempuan = binding.radioButton2
+            var selectedID = binding.radio.checkedRadioButtonId
+            var jenisKelamin = if (selectedID == laki.id) {
+                "Laki - laki"
+            } else {
+                "Perempuan"
+            }
+
+            var tempatLahir = binding.pob.text.toString()
+
             startActivity(
                 Intent(this, EditDataActivity::class.java)
                     .putExtra(EditDataActivity.EXTRA_NAMA, nama)
@@ -79,8 +79,6 @@ class MainActivity : AppCompatActivity() {
             selectedImg.let { uri ->
 //                val myFile = uriToFile(uri, this)
                 getFile = uri
-                Log.d("FOTO MAIN", "$getFile")
-
                 binding.ivPreviewImage.setImageURI(uri)
             }
         }

@@ -31,9 +31,6 @@ class EditDataActivity : AppCompatActivity() {
         val tempatLahir = intent.getStringExtra(EXTRA_TEMPAT_LAHIR)
         val foto = Uri.parse(intent.getStringExtra(EXTRA_FOTO))
 
-        Log.d("FOTO", "$foto")
-//        val foto1 = Uri.parse()
-
         binding.imageView2.setImageURI(foto)
         binding.inputnama.setText(nama)
         binding.inputnip.setText(nip)
